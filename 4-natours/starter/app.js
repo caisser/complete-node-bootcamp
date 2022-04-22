@@ -1,23 +1,22 @@
 const express = require('express');
+const morgan = require('morgan');
+
+const toursRouter = require('./routes/tours.router');
+const usersRouter = require('./routes/users.router');
 
 const app = express();
 
-app.get('/api/route', (req, res) => {
-  console.log(req);
-  res.status(200).json({
-    data: [],
-    message: 'data retrieved',
-  });
-});
+// Middlewares
 
-app.post('/', (req, res) => {
-  res.status(200).json({
-    data: [],
-    message: 'data retrieved',
-  });
-});
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`App runing in port  ${port}`);
-});
+// Routes
+
+app.use('/api/tours', toursRouter);
+app.use('/api/users', usersRouter);
+
+module.exports = app;
