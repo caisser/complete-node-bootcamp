@@ -3,12 +3,17 @@ const toursController = require('../controllers/tours.controller');
 
 const router = express.Router();
 
-router.param('id', toursController.checkId);
+// router.param('id', toursController.checkId);
+
+router
+  .route('/top-5-cheap')
+  .get(toursController.aliasTopTours, toursController.getTours);
 
 router
   .route('/')
   .get(toursController.getTours)
-  .post(toursController.checkBody, toursController.createTour);
+  .post(toursController.createTour); //toursController.checkBody,
+
 router
   .route('/:id')
   .get(toursController.getTourById)

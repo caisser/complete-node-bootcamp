@@ -14,7 +14,7 @@ mongoose
   .connect(DB, {
     useNewUrlParser: true,
   })
-  .then(() => console.log('Connectec to mongo successfully!'));
+  .then(() => console.log('Connected to mongo successfully!'));
 
 // Start Server
 const port = process.env.PORT || 3000;
