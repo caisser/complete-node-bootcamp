@@ -13,7 +13,9 @@ const tourSchema = new mongoose.Schema(
       minlength: [10, 'A tour name must have more or equal than 10 characters'],
       validate: [validator.isAlpha, 'Tour name must only contain characters'],
     },
-    slug: String,
+    slug: {
+      type: String,
+    },
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration'],
@@ -67,13 +69,17 @@ const tourSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A tour must have a cover image'],
     },
-    images: [String],
+    images: {
+      type: [String],
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
       select: false,
     },
-    startDates: [Date],
+    startDates: {
+      type: [Date],
+    },
     secretTour: {
       type: Boolean,
       default: false,

@@ -7,7 +7,9 @@
   "description": "Learning node, express and mongoDb",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start:prod": "NODE_ENV=production node server.js",
+    "debug": "ndb server.js"
   },
   "author": "Luis Cardona",
   "license": "ISC",
