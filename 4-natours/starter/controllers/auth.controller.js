@@ -12,6 +12,19 @@ const signToken = (payload) => {
   return token;
 };
 
+const createSendToken = (user, statusCode, message, res) => {
+  const token = signToken({
+    id: user._id,
+  });
+
+  res.status(statusCode).json({
+    status: 'success',
+    message,
+    token,
+    data: { user },
+  });
+};
+
 exports.singup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -22,16 +35,7 @@ exports.singup = catchAsync(async (req, res, next) => {
     role: req.body.role,
   });
 
-  const token = signToken({
-    id: newUser._id,
-  });
-
-  res.status(201).json({
-    status: 'success',
-    message: 'User created',
-    token,
-    data: { user: newUser },
-  });
+  createSendToken(newUser, 201, 'User created', res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -50,15 +54,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   // 3) If everything is correct, send token to client
-  const token = signToken({
-    id: user._id,
-  });
-
-  res.status(200).json({
-    status: 'success',
-    message: 'User logged in',
-    token,
-  });
+  createSendToken(user, 200, 'User logged in!', res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -175,13 +171,21 @@ exports.resetPassword = async (req, res, next) => {
 
   await user.save();
   // 4) Log the user in, send the JWT
-  const token = signToken({
-    id: user._id,
-  });
-
-  res.status(200).json({
-    status: 'success',
-    message: 'password modified',
-    token,
-  });
+  createSendToken(user, 200, 'Password updated!', res);
 };
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // 1) Get user
+  const user = await User.findById(req.user.id).select('+password');
+  const { password } = req.body;
+  // 2) Check if the POSTed password is correct
+  if (!(await user.correctPassword(password, user.password))) {
+    return next(new AppError('Incorrect password', 400));
+  }
+  // 3) If so, update the password
+  user.password = req.body.newPassword;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // 4) Log user in, send JWT
+  createSendToken(user, 200, 'Password updated!', res);
+});
