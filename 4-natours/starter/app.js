@@ -10,6 +10,7 @@ const AppError = require('./utils/appError');
 const errorHandler = require('./controllers/error.controller');
 const toursRouter = require('./routes/tours.router');
 const usersRouter = require('./routes/users.router');
+const reviewsRouter = require('./routes/review.router');
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use('/api/tours', toursRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/reviews', reviewsRouter);
 
 app.all('*', (req, res, next) => {
   // Error custom class
