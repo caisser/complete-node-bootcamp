@@ -131,6 +131,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+// Virtual populate, connectiong tours and reviews avoiding child referencing
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 // Mongoose DB middleware
 // Document middleware that runs before .save() and .create()
 tourSchema.pre('save', function (next) {

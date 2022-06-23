@@ -19,11 +19,13 @@ const reviewSchema = new mongoose.Schema(
       default: Date.now(),
       select: false,
     },
+    // Embeding parent referencing
     tour: {
       type: mongoose.Schema.ObjectId,
       ref: 'Tour',
       required: [true, 'Review must belong to a tour.'],
     },
+    // Embeding parent referencing
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
@@ -39,9 +41,13 @@ const reviewSchema = new mongoose.Schema(
 // Middleware
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'user tour',
-    select: '-__v -passwordChangedAt',
+    path: 'user',
+    select: 'name',
   });
+  // .populate({
+  //   path: 'tour',
+  //   select: 'name photo',
+  // });
   next();
 });
 
