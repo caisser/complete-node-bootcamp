@@ -17,10 +17,8 @@ router.delete('/deleteMe', authController.protect, usersController.deleteMe);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
-router
-  .route('/')
-  .get(usersController.getUsers)
-  .post(usersController.createUser);
+router.route('/').get(usersController.getUsers);
+
 router
   .route('/:id')
   .get(usersController.getUserById)
