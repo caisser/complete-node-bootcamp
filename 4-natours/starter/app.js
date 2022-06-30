@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -11,10 +12,19 @@ const errorHandler = require('./controllers/error.controller');
 const toursRouter = require('./routes/tours.router');
 const usersRouter = require('./routes/users.router');
 const reviewsRouter = require('./routes/review.router');
+const viewsRouter = require('./routes/views.router');
 
 const app = express();
 
+// Server side rendering with PUG, supported by node
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // Global Middlewares
+// Serving static files
+// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Security HTTP headers
 app.use(helmet());
 
@@ -54,10 +64,8 @@ app.use(
   })
 );
 
-// Serving static files
-app.use(express.static(`${__dirname}/public`));
-
 // Routes
+app.use('/', viewsRouter);
 
 app.use('/api/tours', toursRouter);
 app.use('/api/users', usersRouter);
