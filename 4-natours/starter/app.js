@@ -31,7 +31,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      scriptSrc: ["'self'", 'https://*.cloudflare.com'],
+      scriptSrc: [
+        "'self'",
+        'https://*.cloudflare.com',
+        'https://js.stripe.com/',
+      ],
+      frameSrc: ["'self'", 'https://js.stripe.com/'],
+      connectSrc: ["'self'", 'ws://localhost:*'],
     },
   })
 );

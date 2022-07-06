@@ -54,7 +54,7 @@ exports.getOne = (Model, populateOptions) =>
 
     res.status(200).json({
       status: 'success',
-      message: 'Tour retrieved',
+      message: 'Document retrieved',
       data: { data: doc },
     });
   });
